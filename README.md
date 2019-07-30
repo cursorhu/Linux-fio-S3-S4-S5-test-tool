@@ -25,5 +25,57 @@ It's recommanded to resize the swapfile to the size of RAM, for example, if your
      mkswap /swapfile  
      swapon /swapfile  
 ```
-to hibernate and resume from swapfile, you must config grub file of device UUID and offset and size of swapfile   
-use `df -h` to find your filesystem name, use `blkid` to find corresponding UUID value, use `filefrag –v /swapfile` to find offset of swapfile
+to hibernate and resume from swapfile, you must config grub file of device UUID and offset and size of swapfile.   
+use `df -h` to find your filesystem name, use `blkid` to find corresponding UUID value, use `filefrag –v /swapfile` to find physical offset of swapfile
+finally,modify `/etc/default/grub` as following
+`GRUB_CMDLINE_LINUX_DEFAULT="quiet splash resume=UUID=your_UUID resume_offset=your_physical_offset"`
+then update grub, and restart PC
+`update-grub`
+
+## disable updates and set auto-login
+for S5(restart) test, unexpected updates may cause S5 fail to wakeup, and auto-login is necessary too  
+disable updates:  
+`gedit /etc/apt/apt.conf.d/20auto-upgrades`  
+and set all values to 0
+
+set auto-login:  
+`gedit /usr/share/lightdm/lightdm.conf.d/50-ubuntu.conf`
+```
+user-session=ubuntu  
+autologin-user=yourUserName  
+```
+`gedit /etc/gdm3/custom.conf`  
+```
+AutomaticLoginEnable = true  
+AutomaticLogin = yourUserName  
+```
+# 3.run scripts
+all script is recommanded to run at /home/yourUserName
+## run fio
+```
+./fio_start.sh
+```
+## stop fio
+```
+./fio_stop.sh
+```
+## run S3/S4
+./s3s4.sh option loops_you_need, for example:
+```
+./s3s4.sh s3 999
+```
+```
+./s3s4.sh s4 999
+```
+## stop S3/S4
+just turn off terminal
+## run S5
+```
+./s5_start.sh
+```
+## stop S5
+```
+./s5_stop.sh
+```
+# logs
+all logs are stored at log folder in script path in OPTION_DATA.log format

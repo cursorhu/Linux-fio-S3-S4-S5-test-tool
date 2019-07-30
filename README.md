@@ -35,8 +35,7 @@ then update grub, and restart PC
 ## disable updates and set auto-login
 for S5(restart) test, unexpected updates may cause S5 fail to wakeup, and auto-login is necessary too  
 disable updates:  
-`gedit /etc/apt/apt.conf.d/20auto-upgrades`  
-and set all values to 0
+`gedit /etc/apt/apt.conf.d/20auto-upgrades`, set all values to 0
 
 set auto-login:  
 `gedit /usr/share/lightdm/lightdm.conf.d/50-ubuntu.conf`
